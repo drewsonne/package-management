@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo Send to S3!
