@@ -1,3 +1,82 @@
-#!/bin/bash
+#!/bin/bash -e
 
-echo Send to S3!
+# Send error to syslog and print to stdout
+# If a "1" is provided as a second argument, then it's a fatal error, exit the program.
+function error () {
+  logger -s $1
+  if [ "$#" -eq 2 ] && [ "$2" -eq 1 ]; then
+    exit 1;
+  fi
+}
+
+
+# Print the help display.
+function printHelp () {
+        echo $' Usage:'
+        echo $'   AWS_*=value pip2s3 \e[4ms3_bucket\e[0m [\e[4mproject_folder\e[0m]'
+        echo $'\n \e[1mArguments\e[0m'
+        echo $'    \e[4ms3_bucket\e[0m           Path to an s3 bucket and key. eg, s3://mybucket/key.'
+        echo $'    \e[4mproject_folder\e[0m      Path to a folder with requirements.txt in it. Default is current working directory.'
+        echo $'\n \e[1mEnvironment Variables\e[0m'
+        echo $'    $AWS_ACCESS_KEY_ID      AWS access key'
+        echo $'    $AWS_SECRET_ACCESS_KEY  AWS secret key. Access and secret key variables override credentials stored in credential and config files.'
+        echo $'    $AWS_SESSION_TOKEN      session token. A session token is only required if you are using temporary security credentials.'
+        echo $'    $AWS_DEFAULT_REGION     AWS region. This variable overrides the default region of the in-use profile, if set.'
+        echo $'    $AWS_DEFAULT_PROFILE    name of the CLI profile to use. This can be the name of a profile stored in a credential or config file, or default to use the default profile.'
+        echo $'    $AWS_CONFIG_FILE        path to a CLI config file.'
+        echo $'\n \e[1mConfiguration\e[0m'
+        echo $'    After running this script, you can access your packages by either configuring the file'
+        echo $'    \e[4m/etc/pip.conf\e[0m, or add \e[1m--extra-index-url=http://your-s3-bucket/packages/simple/\e[0m to your pip'
+        echo $'    command. The configuration for \e[4m/etc/pip.conf\e[0m is is composed of:'
+        echo ''
+        echo $'        [global]'
+        echo $'        extra_index_url = http://your-s3-bucket/packages/simple/'
+        echo $''
+        echo $'    You can now use \e[1mpip install my_package\e[0m in the normal manner and refer to packages in this s3 repository.\n'
+}
+
+function mktemp_scratch() {
+  scratch_path="$1"
+  if [ "$1" == "-d" ]; then
+    mkdir -p "$scratch_path"
+  else
+    mkdir -p $(dirname $scratch_path)
+    touch "$scratch_path"
+  fi
+  echo "$scratch_path"
+}
+
+DESTINATION_S3=""
+DEBUG_MODE=0
+
+if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+  printHelp; exit 0;
+fi
+
+if [ -z "$1" ]; then
+  printHelp; echo
+  error "Please provide a url for the destination s3 bucket." 1
+else
+  DESTINATION_S3="$1"
+fi
+
+if [ -z "$2" ]; then
+  REQUIREMENTS_PATH="$PWD"
+else
+  REQUIREMENTS_PATH="$2"
+fi
+
+if [ ! -f "${REQUIREMENTS_PATH}/requirements.txt" ]; then
+  printHelp; echo
+  error "Path to requirements file does not exist: '${REQUIREMENTS_PATH}/requirements.txt'" 1
+fi
+
+TEMP_SCRATCH=$(mktemp -d)
+
+# 1 - Read requirements.txt out of current directory
+pip2pi "$TEMP_SCRATCH" -r "${REQUIREMENTS_PATH}/requirements.txt"
+
+# 2 -
+aws s3 sync "$TEMP_SCRATCH" "$DESTINATION_S3"
+
+rm -rf "$TEMP_SCRATCH"
