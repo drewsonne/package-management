@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+PIP2PI_LOCATION='pip2pi'
+AWSCLI_LOCATION='aws'
+
 # Send error to syslog and print to stdout
 # If a "1" is provided as a second argument, then it's a fatal error, exit the program.
 function error () {
