@@ -5,5 +5,7 @@ Small utility allowing easy creation of pip servers in s3, by functionality betw
 # Installation
 
 ## Homebrew
-Mac OS X users can install pyenv-virtualenv with the Homebrew package manager. This will give you access to the pyenv-virtualenv command.
+Mac OS X users can install pip2s3 with the Homebrew package manager. This will give you access to the pip2s3 command.
 
+     $ brew tap drewsonne/devops
+     $ brew install pip2s3
