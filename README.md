@@ -18,12 +18,14 @@ Mac OS X users can install pip2s3 with the Homebrew package manager. This will g
     project_folder      Path to a folder with requirements.txt in it. Default is current working directory.
 
  Environment Variables
-    $AWS_ACCESS_KEY_ID      AWS access key
-    $AWS_SECRET_ACCESS_KEY  AWS secret key. Access and secret key variables override credentials stored in credential and config files.
-    $AWS_SESSION_TOKEN      session token. A session token is only required if you are using temporary security credentials.
-    $AWS_DEFAULT_REGION     AWS region. This variable overrides the default region of the in-use profile, if set.
-    $AWS_DEFAULT_PROFILE    name of the CLI profile to use. This can be the name of a profile stored in a credential or config file, or default to use the default profile.
-    $AWS_CONFIG_FILE        path to a CLI config file.
+| Environment variable     | Description          |
+|--------------------------|----------------------|
+| `$AWS_ACCESS_KEY_ID      | AWS access key |
+| `$AWS_SECRET_ACCESS_KEY  | AWS secret key. Access and secret key variables override credentials stored in credential and config files. |
+| `$AWS_SESSION_TOKEN      | session token. A session token is only required if you are using temporary security credentials.|
+| `$AWS_DEFAULT_REGION     | AWS region. This variable overrides the default region of the in-use profile, if set.|
+| `$AWS_DEFAULT_PROFILE    | name of the CLI profile to use. This can be the name of a profile stored in a credential or config file, or default to use the default profile. |
+| `$AWS_CONFIG_FILE        | path to a CLI config file.|
 
 # Configuration
     After running this script, you can access your packages by either configuring the file
