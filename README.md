@@ -11,14 +11,17 @@ Mac OS X users can install pip2s3 with the Homebrew package manager. This will g
      $ brew install pip2s3
      
 # Usage
+
+## CLI
    AWS_*=value pip2s3 s3_bucket [project_folder]
 
- Arguments
+
+## Arguments
  
     - s3_bucket           Path to an s3 bucket and key. eg, s3://mybucket/key.
     - project_folder      Path to a folder with requirements.txt in it. Default is current working directory.
 
- Environment Variables
+## Environment Variables
  
  Environment variable     | Description          
 --------------------------|----------------------
