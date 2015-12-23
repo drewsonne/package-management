@@ -15,7 +15,8 @@ Mac OS X users can install pip2s3 with the Homebrew package manager. This will g
 ## CLI
    `AWS_*=value pip2s3 s3_bucket [project_folder]`
    
-`project_folder` is the path to a directory containing a 'requirements.txt' file, with a list of pip packages to download and mirror to s3
+ - `s3_bucket` URI prefixed by `s3://` describing the bucket and path to push the pip mirror to  
+ - `project_folder` is the path to a directory containing a 'requirements.txt' file, with a list of pip packages to download and mirror to s3
 
 
 ## Arguments
